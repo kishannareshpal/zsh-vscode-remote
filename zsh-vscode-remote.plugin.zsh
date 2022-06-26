@@ -24,7 +24,7 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 
 function _version() {
-  echo "coder version 0.0.2 (2022-06-26)"
+  echo "coder version 0.0.3 (2022-06-26)"
   echo "https://github.com/kishannareshpal/zsh-vscode-remote"
 }
 
