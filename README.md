@@ -8,15 +8,15 @@ It's mostly a wrapper around [`code --remote ...`](https://code.visualstudio.com
 
 ### Usage
 
-Let's say you want to open your projects directory in a remote computer via ssh. Just do:
+Let's say you want to open your `myprojects` directory in a remote computer via ssh. Just do:
 ```bash
-# Use autojump to quickly select the myprojects directory on host
-#   If you don't have `wting/autojump` installed and aliased as 'j'
-#   the program will fallback to use whatever comes after -j as the absolute path.
-$ coder 192.168.1.101 -j myprojects
-
-# You can also manually pass the absolute path to the myprojects directory on host
+# Pass in the absolute path to the 'myprojects' directory on host
 $ coder 192.168.1.101 '/users/kishan/myprojects'
+
+# Or simply leaverage the power of autojump to quickly select the myprojects directory on host
+#   If you don't have `wting/autojump` installed and aliased as 'j' in the host,
+#   the program will fallback to use the value of -j as the absolute path.
+$ coder 192.168.1.101 -j myprojects
 ```
 
 ```bash
@@ -52,10 +52,11 @@ $ . ~/.zshrc
 
 # You can confirm it's installed by running:
 $ coder -v
-# x.y.z (yyyy-mm-dd)
+# coder version x.y.z (YYYY-MM-DD)
+# https://github.com/kishannareshpal/zsh-vscode-remote
 ```
 
-##### Good to haves:
-  * [wting/autojump](https://github.com/wting/autojump) - Use it via the `-j <DIRECTORY>` option
-  to quickly select the directory in the host.
+##### Good to haves in the host machine:
+  * [wting/autojump](https://github.com/wting/autojump) - Install on your host machine to use the `-j <DIRECTORY>` option
+  in order to quickly select the directory in the host.
 
