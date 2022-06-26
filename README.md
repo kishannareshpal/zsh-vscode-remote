@@ -43,8 +43,9 @@ $ git clone https://github.com/kishannareshpal/zsh-vscode-remote ~/.oh-my-zsh/cu
 
 # Now open your ~/.zshrc, with any editor:
 $ nano ~/.zshrc
-  # And add 'coder' to the plugins list:
-  plugins=(…, coder)
+
+# Add 'zsh-vscode-remote' to the plugins list:
+plugins=(…, zsh-vscode-remote)
 
 # Save and quite, then source
 $ . ~/.zshrc
