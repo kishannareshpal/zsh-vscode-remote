@@ -24,7 +24,7 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 
 function _version() {
-  echo "coder version 0.0.1 (2022-06-26)"
+  echo "coder version 0.0.2 (2022-06-26)"
   echo "https://github.com/kishannareshpal/zsh-vscode-remote"
 }
 
@@ -67,7 +67,8 @@ function coder() {
   finalDirPath=""
 
   ### Handle options if available
-  case $optsOrHostIP in
+  opts=$optsOrHostIP
+  case $opts in
     "");&
     "-h");&
     "--help")
@@ -83,6 +84,7 @@ function coder() {
       ;;
   esac
 
+  $hostIP=$optsOrHostIP
   case $dirOrOpt in
     "-j"*)
       # Attempt to use autojump on host to find the directory to open
@@ -106,7 +108,7 @@ function coder() {
   esac
 
   # Open VSCode remote in host at the chosen directory
-  # code --remote "ssh-remote+$hostIP" ${finalDirPath}
+  code --remote "ssh-remote+$hostIP" ${finalDirPath}
   echo -e "${BOLDBLUE}Opening VSCode remotely connected via ssh to: $hostIP.${ENDCOLOR}"
   echo -e "${ITALICCYAN}→ Selected directory: ${finalDirPath:-"No directory selected"}.${ENDCOLOR}"
 }
