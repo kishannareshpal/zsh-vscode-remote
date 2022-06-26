@@ -84,7 +84,7 @@ function coder() {
       ;;
   esac
 
-  $hostIP=$optsOrHostIP
+  hostIP=$optsOrHostIP
   case $dirOrOpt in
     "-j"*)
       # Attempt to use autojump on host to find the directory to open
