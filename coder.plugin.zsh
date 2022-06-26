@@ -1,6 +1,5 @@
 # Open visual studio remotely connected via ssh
-# https://github.com/kishannareshpal/vscode-ssh-remote
-# v0.0.1
+# https://github.com/kishannareshpal/zsh-vscode-remote
 # Copyright (c) 2022 Kishan Jadav
 # 
 # Permission is hereby granted, free of charge, to any person
@@ -24,31 +23,90 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 
+function _version() {
+  echo "coder version 0.0.1 (2022-06-26)"
+  echo "https://github.com/kishannareshpal/zsh-vscode-remote"
+}
 
-USE_AUTOJUMP=true
+function _help() {
+  # Display Help
+  echo "Open VSCode remotely connected to an ssh host and directory. A wrapper around 'code --remote ...'"
+  echo
+  echo "Usage: coder <SSH-HOST> [-h|--help]|[-v|--version]|[-j DIRECTORY|<ABSOLUTE-DIRECTORY-PATH>]"
+  echo 
+  echo "Optional positional arguments:"
+  echo "  ABSOLUTE-DIREACTORY-PATH    Full path of the directory to open. Defaults to no directory."
+  echo 
+  echo "Available options:"
+  echo "  -j <DIRECTORY>              Use 'wting/autojump' in host for selecting the DIRECTORY to open"
+  echo "  -h, --help                  Print this help message"
+  echo "  -v, --version               Show the version"
+  echo
+}
 
 function coder() {
-  # Check to see if the ssh remote has autojump installed
-  if ! command -v j &> /dev/null
-  then
-    USE_AUTOJUMP=false
-    echo 'Please install `autojump` plugin in the host, for better ux'
-    exit
-  fi
+  ### Misc
+  BLUE="34"
+  CYAN="96"
+  BOLDBLUE="\e[1;${BLUE}m"
+  ITALICCYAN="\e[3;${CYAN}m"
+  ENDCOLOR="\e[0m"
 
-  # Grab the path of the directory we're opening remotely
-  DIR_PATH=`
-    ssh $1 exec "
-      . ~/.zshrc;
-      if command -v j &> /dev/null
-      then
-        j $2
-      else
-        echo $2
-      fi
-    "
-  `
+  ### Options
+  # Remote host
+  optsOrHostIP="$1"
+  # Absolute path to the file / directory on the host to open
+  # Or, if it starts with a dash, then the option
+  dirOrOpt="$2"
+  # If argument $2 is an option, than this will be used as the value for that option
+  # Otherwise, unused.
+  optValue="$3"
+  
+  ### Vars
+  # The absolute path of the directory to open vscode remotely into.
+  finalDirPath=""
 
-  # Open VSCode remote in host at the directory
-  code --remote ssh-remote+$1 $DIR_PATH
+  ### Handle options if available
+  case $optsOrHostIP in
+    "");&
+    "-h");&
+    "--help")
+      # Print an help message
+      _help
+      return``
+      ;;
+    "-v");&
+    "--version")
+      # Show the version
+      _version
+      return
+      ;;
+  esac
+
+  case $dirOrOpt in
+    "-j"*)
+      # Attempt to use autojump on host to find the directory to open
+      finalDirPath=`
+        ssh $hostIP exec "
+          . ~/.zshrc;
+          if command -v j &> /dev/null
+          then
+            j $optValue
+          else
+            echo $optValue
+          fi
+        "
+      `
+      ;;
+    *)
+      # Use the absolute directory path provided. 
+      # Defaults to '.' (which won't open any directory at all in the host)
+      finalDirPath="${dirOrOpt:-'.'}"
+      ;;
+  esac
+
+  # Open VSCode remote in host at the chosen directory
+  # code --remote "ssh-remote+$hostIP" ${finalDirPath}
+  echo -e "${BOLDBLUE}Opening VSCode remotely connected via ssh to: $hostIP.${ENDCOLOR}"
+  echo -e "${ITALICCYAN}→ Selected directory: ${finalDirPath:-"No directory selected"}.${ENDCOLOR}"
 }
