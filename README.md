@@ -47,7 +47,7 @@ $ nano ~/.zshrc
 # Add 'zsh-vscode-remote' to the plugins list:
 plugins=(…, zsh-vscode-remote)
 
-# Save and quite, then source
+# Save and quit, then source the shell:
 $ . ~/.zshrc
 
 # You can confirm it's installed by running:
